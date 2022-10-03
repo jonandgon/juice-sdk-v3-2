@@ -24,9 +24,9 @@ import type {
   TypedEvent,
   TypedListener,
   OnEvent,
-} from "./common";
+} from "../../../../../common";
 
-export interface JBReconfigurationBufferBallotInterface
+export interface JB7DayReconfigurationBufferBallotInterface
   extends utils.Interface {
   functions: {
     "duration()": FunctionFragment;
@@ -102,12 +102,12 @@ export type FinalizeEvent = TypedEvent<
 
 export type FinalizeEventFilter = TypedEventFilter<FinalizeEvent>;
 
-export interface JBReconfigurationBufferBallot extends BaseContract {
+export interface JB7DayReconfigurationBufferBallot extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
   attach(addressOrName: string): this;
   deployed(): Promise<this>;
 
-  interface: JBReconfigurationBufferBallotInterface;
+  interface: JB7DayReconfigurationBufferBallotInterface;
 
   queryFilter<TEvent extends TypedEvent>(
     event: TypedEventFilter<TEvent>,

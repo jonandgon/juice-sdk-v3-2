@@ -75,6 +75,26 @@ export type JBTokenAmountStructOutput = [
   currency: BigNumber;
 };
 
+export type JBPayDelegateAllocationStruct = {
+  delegate: string;
+  amount: BigNumberish;
+};
+
+export type JBPayDelegateAllocationStructOutput = [string, BigNumber] & {
+  delegate: string;
+  amount: BigNumber;
+};
+
+export type JBRedemptionDelegateAllocationStruct = {
+  delegate: string;
+  amount: BigNumberish;
+};
+
+export type JBRedemptionDelegateAllocationStructOutput = [string, BigNumber] & {
+  delegate: string;
+  amount: BigNumber;
+};
+
 export interface JBSingleTokenPaymentTerminalStoreInterface
   extends utils.Interface {
   functions: {
@@ -763,10 +783,15 @@ export interface JBSingleTokenPaymentTerminalStore extends BaseContract {
       _metadata: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [JBFundingCycleStructOutput, BigNumber, string, string] & {
+      [
+        JBFundingCycleStructOutput,
+        BigNumber,
+        JBPayDelegateAllocationStructOutput[],
+        string
+      ] & {
         fundingCycle: JBFundingCycleStructOutput;
         tokenCount: BigNumber;
-        delegate: string;
+        delegateAllocations: JBPayDelegateAllocationStructOutput[];
         memo: string;
       }
     >;
@@ -788,10 +813,15 @@ export interface JBSingleTokenPaymentTerminalStore extends BaseContract {
       _metadata: BytesLike,
       overrides?: CallOverrides
     ): Promise<
-      [JBFundingCycleStructOutput, BigNumber, string, string] & {
+      [
+        JBFundingCycleStructOutput,
+        BigNumber,
+        JBRedemptionDelegateAllocationStructOutput[],
+        string
+      ] & {
         fundingCycle: JBFundingCycleStructOutput;
         reclaimAmount: BigNumber;
-        delegate: string;
+        delegateAllocations: JBRedemptionDelegateAllocationStructOutput[];
         memo: string;
       }
     >;

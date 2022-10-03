@@ -1,5 +1,5 @@
 {
-  "name": "juice-sdk",
+  "name": "juice-sdk-v3",
   "version": "0.0.1-alpha",
   "description": "Juicebox SDK monorepo",
   "main": "index.js",

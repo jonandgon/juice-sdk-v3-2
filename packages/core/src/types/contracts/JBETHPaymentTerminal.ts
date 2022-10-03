@@ -51,6 +51,7 @@ export type JBDidPayDataStruct = {
   projectId: BigNumberish;
   currentFundingCycleConfiguration: BigNumberish;
   amount: JBTokenAmountStruct;
+  forwardedAmount: JBTokenAmountStruct;
   projectTokenCount: BigNumberish;
   beneficiary: string;
   preferClaimedTokens: boolean;
@@ -63,6 +64,7 @@ export type JBDidPayDataStructOutput = [
   BigNumber,
   BigNumber,
   JBTokenAmountStructOutput,
+  JBTokenAmountStructOutput,
   BigNumber,
   string,
   boolean,
@@ -73,6 +75,7 @@ export type JBDidPayDataStructOutput = [
   projectId: BigNumber;
   currentFundingCycleConfiguration: BigNumber;
   amount: JBTokenAmountStructOutput;
+  forwardedAmount: JBTokenAmountStructOutput;
   projectTokenCount: BigNumber;
   beneficiary: string;
   preferClaimedTokens: boolean;
@@ -86,6 +89,7 @@ export type JBDidRedeemDataStruct = {
   currentFundingCycleConfiguration: BigNumberish;
   projectTokenCount: BigNumberish;
   reclaimedAmount: JBTokenAmountStruct;
+  forwardedAmount: JBTokenAmountStruct;
   beneficiary: string;
   memo: string;
   metadata: BytesLike;
@@ -97,6 +101,7 @@ export type JBDidRedeemDataStructOutput = [
   BigNumber,
   BigNumber,
   JBTokenAmountStructOutput,
+  JBTokenAmountStructOutput,
   string,
   string,
   string
@@ -106,6 +111,7 @@ export type JBDidRedeemDataStructOutput = [
   currentFundingCycleConfiguration: BigNumber;
   projectTokenCount: BigNumber;
   reclaimedAmount: JBTokenAmountStructOutput;
+  forwardedAmount: JBTokenAmountStructOutput;
   beneficiary: string;
   memo: string;
   metadata: string;
@@ -453,8 +459,8 @@ export interface JBETHPaymentTerminalInterface extends utils.Interface {
 
   events: {
     "AddToBalance(uint256,uint256,uint256,string,bytes,address)": EventFragment;
-    "DelegateDidPay(address,tuple,address)": EventFragment;
-    "DelegateDidRedeem(address,tuple,address)": EventFragment;
+    "DelegateDidPay(address,tuple,uint256,address)": EventFragment;
+    "DelegateDidRedeem(address,tuple,uint256,address)": EventFragment;
     "DistributePayouts(uint256,uint256,uint256,address,uint256,uint256,uint256,uint256,string,address)": EventFragment;
     "DistributeToPayoutSplit(uint256,uint256,uint256,tuple,uint256,address)": EventFragment;
     "HoldFee(uint256,uint256,uint256,uint256,address,address)": EventFragment;
@@ -506,10 +512,11 @@ export type AddToBalanceEventFilter = TypedEventFilter<AddToBalanceEvent>;
 export interface DelegateDidPayEventObject {
   delegate: string;
   data: JBDidPayDataStructOutput;
+  delegatedAmount: BigNumber;
   caller: string;
 }
 export type DelegateDidPayEvent = TypedEvent<
-  [string, JBDidPayDataStructOutput, string],
+  [string, JBDidPayDataStructOutput, BigNumber, string],
   DelegateDidPayEventObject
 >;
 
@@ -518,10 +525,11 @@ export type DelegateDidPayEventFilter = TypedEventFilter<DelegateDidPayEvent>;
 export interface DelegateDidRedeemEventObject {
   delegate: string;
   data: JBDidRedeemDataStructOutput;
+  delegatedAmount: BigNumber;
   caller: string;
 }
 export type DelegateDidRedeemEvent = TypedEvent<
-  [string, JBDidRedeemDataStructOutput, string],
+  [string, JBDidRedeemDataStructOutput, BigNumber, string],
   DelegateDidRedeemEventObject
 >;
 
@@ -906,7 +914,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<[JBFeeStructOutput[]]>;
 
     /**
-     * Addresses that can be paid towards from this terminal without incurring a fee. _address The address that can be paid toward.
+     * Addresses that can be paid towards from this terminal without incurring a fee.
      */
     isFeelessAddress(
       arg0: string,
@@ -1025,7 +1033,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<ContractTransaction>;
 
     /**
-     * Only the owner of this contract can change the fee gauge.If the fee gauge reverts when called upon while a project is attempting to distribute its funds, a project's funds will be locked. This is a known risk.
+     * Only the owner of this contract can change the fee gauge.
      * Allows the fee gauge to be updated.
      * @param _feeGauge The new fee gauge.
      */
@@ -1218,7 +1226,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
   ): Promise<JBFeeStructOutput[]>;
 
   /**
-   * Addresses that can be paid towards from this terminal without incurring a fee. _address The address that can be paid toward.
+   * Addresses that can be paid towards from this terminal without incurring a fee.
    */
   isFeelessAddress(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -1334,7 +1342,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
   ): Promise<ContractTransaction>;
 
   /**
-   * Only the owner of this contract can change the fee gauge.If the fee gauge reverts when called upon while a project is attempting to distribute its funds, a project's funds will be locked. This is a known risk.
+   * Only the owner of this contract can change the fee gauge.
    * Allows the fee gauge to be updated.
    * @param _feeGauge The new fee gauge.
    */
@@ -1527,7 +1535,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<JBFeeStructOutput[]>;
 
     /**
-     * Addresses that can be paid towards from this terminal without incurring a fee. _address The address that can be paid toward.
+     * Addresses that can be paid towards from this terminal without incurring a fee.
      */
     isFeelessAddress(arg0: string, overrides?: CallOverrides): Promise<boolean>;
 
@@ -1638,7 +1646,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     setFee(_fee: BigNumberish, overrides?: CallOverrides): Promise<void>;
 
     /**
-     * Only the owner of this contract can change the fee gauge.If the fee gauge reverts when called upon while a project is attempting to distribute its funds, a project's funds will be locked. This is a known risk.
+     * Only the owner of this contract can change the fee gauge.
      * Allows the fee gauge to be updated.
      * @param _feeGauge The new fee gauge.
      */
@@ -1730,25 +1738,29 @@ export interface JBETHPaymentTerminal extends BaseContract {
       caller?: null
     ): AddToBalanceEventFilter;
 
-    "DelegateDidPay(address,tuple,address)"(
+    "DelegateDidPay(address,tuple,uint256,address)"(
       delegate?: string | null,
       data?: null,
+      delegatedAmount?: null,
       caller?: null
     ): DelegateDidPayEventFilter;
     DelegateDidPay(
       delegate?: string | null,
       data?: null,
+      delegatedAmount?: null,
       caller?: null
     ): DelegateDidPayEventFilter;
 
-    "DelegateDidRedeem(address,tuple,address)"(
+    "DelegateDidRedeem(address,tuple,uint256,address)"(
       delegate?: string | null,
       data?: null,
+      delegatedAmount?: null,
       caller?: null
     ): DelegateDidRedeemEventFilter;
     DelegateDidRedeem(
       delegate?: string | null,
       data?: null,
+      delegatedAmount?: null,
       caller?: null
     ): DelegateDidRedeemEventFilter;
 
@@ -2077,7 +2089,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<BigNumber>;
 
     /**
-     * Addresses that can be paid towards from this terminal without incurring a fee. _address The address that can be paid toward.
+     * Addresses that can be paid towards from this terminal without incurring a fee.
      */
     isFeelessAddress(
       arg0: string,
@@ -2196,7 +2208,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<BigNumber>;
 
     /**
-     * Only the owner of this contract can change the fee gauge.If the fee gauge reverts when called upon while a project is attempting to distribute its funds, a project's funds will be locked. This is a known risk.
+     * Only the owner of this contract can change the fee gauge.
      * Allows the fee gauge to be updated.
      * @param _feeGauge The new fee gauge.
      */
@@ -2392,7 +2404,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     /**
-     * Addresses that can be paid towards from this terminal without incurring a fee. _address The address that can be paid toward.
+     * Addresses that can be paid towards from this terminal without incurring a fee.
      */
     isFeelessAddress(
       arg0: string,
@@ -2511,7 +2523,7 @@ export interface JBETHPaymentTerminal extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     /**
-     * Only the owner of this contract can change the fee gauge.If the fee gauge reverts when called upon while a project is attempting to distribute its funds, a project's funds will be locked. This is a known risk.
+     * Only the owner of this contract can change the fee gauge.
      * Allows the fee gauge to be updated.
      * @param _feeGauge The new fee gauge.
      */

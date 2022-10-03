@@ -26,13 +26,44 @@ import type {
   OnEvent,
 } from "./common";
 
+export type JBSplitStruct = {
+  preferClaimed: boolean;
+  preferAddToBalance: boolean;
+  percent: BigNumberish;
+  projectId: BigNumberish;
+  beneficiary: string;
+  lockedUntil: BigNumberish;
+  allocator: string;
+};
+
+export type JBSplitStructOutput = [
+  boolean,
+  boolean,
+  BigNumber,
+  BigNumber,
+  string,
+  BigNumber,
+  string
+] & {
+  preferClaimed: boolean;
+  preferAddToBalance: boolean;
+  percent: BigNumber;
+  projectId: BigNumber;
+  beneficiary: string;
+  lockedUntil: BigNumber;
+  allocator: string;
+};
+
 export interface JBETHERC20SplitsPayerDeployerInterface
   extends utils.Interface {
   functions: {
     "deploySplitsPayer(uint256,uint256,uint256,address,uint256,address,bool,string,bytes,bool,address)": FunctionFragment;
+    "deploySplitsPayerWithSplits(uint256,(bool,bool,uint256,uint256,address,uint256,address)[],address,uint256,address,bool,string,bytes,bool,address)": FunctionFragment;
   };
 
-  getFunction(nameOrSignatureOrTopic: "deploySplitsPayer"): FunctionFragment;
+  getFunction(
+    nameOrSignatureOrTopic: "deploySplitsPayer" | "deploySplitsPayerWithSplits"
+  ): FunctionFragment;
 
   encodeFunctionData(
     functionFragment: "deploySplitsPayer",
@@ -50,9 +81,28 @@ export interface JBETHERC20SplitsPayerDeployerInterface
       string
     ]
   ): string;
+  encodeFunctionData(
+    functionFragment: "deploySplitsPayerWithSplits",
+    values: [
+      BigNumberish,
+      JBSplitStruct[],
+      string,
+      BigNumberish,
+      string,
+      boolean,
+      string,
+      BytesLike,
+      boolean,
+      string
+    ]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "deploySplitsPayer",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "deploySplitsPayerWithSplits",
     data: BytesLike
   ): Result;
 
@@ -155,6 +205,20 @@ export interface JBETHERC20SplitsPayerDeployer extends BaseContract {
       _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    deploySplitsPayerWithSplits(
+      _defaultSplitsProjectId: BigNumberish,
+      _defaultSplits: JBSplitStruct[],
+      _splitsStore: string,
+      _defaultProjectId: BigNumberish,
+      _defaultBeneficiary: string,
+      _defaultPreferClaimedTokens: boolean,
+      _defaultMemo: string,
+      _defaultMetadata: BytesLike,
+      _defaultPreferAddToBalance: boolean,
+      _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   /**
@@ -186,6 +250,20 @@ export interface JBETHERC20SplitsPayerDeployer extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  deploySplitsPayerWithSplits(
+    _defaultSplitsProjectId: BigNumberish,
+    _defaultSplits: JBSplitStruct[],
+    _splitsStore: string,
+    _defaultProjectId: BigNumberish,
+    _defaultBeneficiary: string,
+    _defaultPreferClaimedTokens: boolean,
+    _defaultMemo: string,
+    _defaultMetadata: BytesLike,
+    _defaultPreferAddToBalance: boolean,
+    _owner: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   callStatic: {
     /**
      *  Allows anyone to deploy a new splits payer contract.
@@ -205,6 +283,20 @@ export interface JBETHERC20SplitsPayerDeployer extends BaseContract {
       _defaultSplitsProjectId: BigNumberish,
       _defaultSplitsDomain: BigNumberish,
       _defaultSplitsGroup: BigNumberish,
+      _splitsStore: string,
+      _defaultProjectId: BigNumberish,
+      _defaultBeneficiary: string,
+      _defaultPreferClaimedTokens: boolean,
+      _defaultMemo: string,
+      _defaultMetadata: BytesLike,
+      _defaultPreferAddToBalance: boolean,
+      _owner: string,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    deploySplitsPayerWithSplits(
+      _defaultSplitsProjectId: BigNumberish,
+      _defaultSplits: JBSplitStruct[],
       _splitsStore: string,
       _defaultProjectId: BigNumberish,
       _defaultBeneficiary: string,
@@ -279,6 +371,20 @@ export interface JBETHERC20SplitsPayerDeployer extends BaseContract {
       _owner: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    deploySplitsPayerWithSplits(
+      _defaultSplitsProjectId: BigNumberish,
+      _defaultSplits: JBSplitStruct[],
+      _splitsStore: string,
+      _defaultProjectId: BigNumberish,
+      _defaultBeneficiary: string,
+      _defaultPreferClaimedTokens: boolean,
+      _defaultMemo: string,
+      _defaultMetadata: BytesLike,
+      _defaultPreferAddToBalance: boolean,
+      _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -300,6 +406,20 @@ export interface JBETHERC20SplitsPayerDeployer extends BaseContract {
       _defaultSplitsProjectId: BigNumberish,
       _defaultSplitsDomain: BigNumberish,
       _defaultSplitsGroup: BigNumberish,
+      _splitsStore: string,
+      _defaultProjectId: BigNumberish,
+      _defaultBeneficiary: string,
+      _defaultPreferClaimedTokens: boolean,
+      _defaultMemo: string,
+      _defaultMetadata: BytesLike,
+      _defaultPreferAddToBalance: boolean,
+      _owner: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    deploySplitsPayerWithSplits(
+      _defaultSplitsProjectId: BigNumberish,
+      _defaultSplits: JBSplitStruct[],
       _splitsStore: string,
       _defaultProjectId: BigNumberish,
       _defaultBeneficiary: string,

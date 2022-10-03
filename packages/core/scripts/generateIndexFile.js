@@ -33,13 +33,15 @@ const IMPORTS =
     contractName => `import {
   abi as ${contractName}ABI_mainnet,
   address as ${contractName}Address_mainnet,
-} from '@jbx-protocol/contracts-v2/deployments/mainnet/${contractName}.json';`,
+} ${(contractName === 'JB3DayReconfigurationBufferBallot' || contractName === 'JB7DayReconfigurationBufferBallot')
+    ? `from '@jbx-protocol/contracts-v2/deployments/mainnet/${contractName}.json';` 
+    : `from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/${contractName}.json';`}`,
   ).join('\n') +
   CONTRACTS.map(
     contractName => `import {
-    abi as ${contractName}ABI_rinkeby,
-    address as ${contractName}Address_rinkeby,
-  } from '@jbx-protocol/contracts-v2/deployments/rinkeby/${contractName}.json';`,
+    abi as ${contractName}ABI_goerli,
+    address as ${contractName}Address_goerli,
+  } from '@jbx-protocol/juice-contracts-v3/deployments/goerli/${contractName}.json';`,
   ).join('\n') +
   '\n' +
   `import {
@@ -55,10 +57,10 @@ const contents =
   HEAD +
   '\n' +
   CONTRACTS.map(
-    contractName => `export const get${contractName} = (signerOrProvider: SignerOrProvider, { network } : { network: 'mainnet' | 'rinkeby' } = { network: 'mainnet' }) =>
+    contractName => `export const get${contractName} = (signerOrProvider: SignerOrProvider, { network } : { network: 'mainnet' | 'goerli' } = { network: 'mainnet' }) =>
 new Contract(
-  network === 'rinkeby' ? ${contractName}Address_rinkeby : ${contractName}Address_mainnet,
-  network === 'rinkeby' ? ${contractName}ABI_rinkeby : ${contractName}ABI_mainnet,
+  network === 'goerli' ? ${contractName}Address_goerli : ${contractName}Address_mainnet,
+  network === 'goerli' ? ${contractName}ABI_goerli : ${contractName}ABI_mainnet,
   signerOrProvider,
 ) as ${contractName};`,
   ).join('\n');

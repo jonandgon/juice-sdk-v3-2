@@ -30,16 +30,14 @@ export interface JBTokenStoreInterface extends utils.Interface {
   functions: {
     "balanceOf(address,uint256)": FunctionFragment;
     "burnFrom(address,uint256,uint256,bool)": FunctionFragment;
-    "changeFor(uint256,address,address)": FunctionFragment;
     "claimFor(address,uint256,uint256)": FunctionFragment;
     "directory()": FunctionFragment;
+    "fundingCycleStore()": FunctionFragment;
     "issueFor(uint256,string,string)": FunctionFragment;
     "mintFor(address,uint256,uint256,bool)": FunctionFragment;
     "operatorStore()": FunctionFragment;
-    "projectOf(address)": FunctionFragment;
     "projects()": FunctionFragment;
-    "requireClaimFor(uint256)": FunctionFragment;
-    "shouldRequireClaimingFor(uint256,bool)": FunctionFragment;
+    "setFor(uint256,address)": FunctionFragment;
     "tokenOf(uint256)": FunctionFragment;
     "totalSupplyOf(uint256)": FunctionFragment;
     "transferFrom(address,uint256,address,uint256)": FunctionFragment;
@@ -51,16 +49,14 @@ export interface JBTokenStoreInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "balanceOf"
       | "burnFrom"
-      | "changeFor"
       | "claimFor"
       | "directory"
+      | "fundingCycleStore"
       | "issueFor"
       | "mintFor"
       | "operatorStore"
-      | "projectOf"
       | "projects"
-      | "requireClaimFor"
-      | "shouldRequireClaimingFor"
+      | "setFor"
       | "tokenOf"
       | "totalSupplyOf"
       | "transferFrom"
@@ -77,14 +73,14 @@ export interface JBTokenStoreInterface extends utils.Interface {
     values: [string, BigNumberish, BigNumberish, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "changeFor",
-    values: [BigNumberish, string, string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "claimFor",
     values: [string, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "directory", values?: undefined): string;
+  encodeFunctionData(
+    functionFragment: "fundingCycleStore",
+    values?: undefined
+  ): string;
   encodeFunctionData(
     functionFragment: "issueFor",
     values: [BigNumberish, string, string]
@@ -97,15 +93,10 @@ export interface JBTokenStoreInterface extends utils.Interface {
     functionFragment: "operatorStore",
     values?: undefined
   ): string;
-  encodeFunctionData(functionFragment: "projectOf", values: [string]): string;
   encodeFunctionData(functionFragment: "projects", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "requireClaimFor",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "shouldRequireClaimingFor",
-    values: [BigNumberish, boolean]
+    functionFragment: "setFor",
+    values: [BigNumberish, string]
   ): string;
   encodeFunctionData(
     functionFragment: "tokenOf",
@@ -130,25 +121,20 @@ export interface JBTokenStoreInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "balanceOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "burnFrom", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "changeFor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "claimFor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "directory", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "fundingCycleStore",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "issueFor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "mintFor", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "operatorStore",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "projectOf", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "projects", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "requireClaimFor",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "shouldRequireClaimingFor",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "setFor", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "tokenOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "totalSupplyOf",
@@ -169,20 +155,18 @@ export interface JBTokenStoreInterface extends utils.Interface {
 
   events: {
     "Burn(address,uint256,uint256,uint256,uint256,bool,address)": EventFragment;
-    "Change(uint256,address,address,address,address)": EventFragment;
     "Claim(address,uint256,uint256,uint256,address)": EventFragment;
     "Issue(uint256,address,string,string,address)": EventFragment;
     "Mint(address,uint256,uint256,bool,bool,address)": EventFragment;
-    "ShouldRequireClaim(uint256,bool,address)": EventFragment;
+    "Set(uint256,address,address)": EventFragment;
     "Transfer(address,uint256,address,uint256,address)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "Burn"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "Change"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Claim"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Issue"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Mint"): EventFragment;
-  getEvent(nameOrSignatureOrTopic: "ShouldRequireClaim"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "Set"): EventFragment;
   getEvent(nameOrSignatureOrTopic: "Transfer"): EventFragment;
 }
 
@@ -201,20 +185,6 @@ export type BurnEvent = TypedEvent<
 >;
 
 export type BurnEventFilter = TypedEventFilter<BurnEvent>;
-
-export interface ChangeEventObject {
-  projectId: BigNumber;
-  newToken: string;
-  oldToken: string;
-  owner: string;
-  caller: string;
-}
-export type ChangeEvent = TypedEvent<
-  [BigNumber, string, string, string, string],
-  ChangeEventObject
->;
-
-export type ChangeEventFilter = TypedEventFilter<ChangeEvent>;
 
 export interface ClaimEventObject {
   holder: string;
@@ -259,18 +229,14 @@ export type MintEvent = TypedEvent<
 
 export type MintEventFilter = TypedEventFilter<MintEvent>;
 
-export interface ShouldRequireClaimEventObject {
+export interface SetEventObject {
   projectId: BigNumber;
-  flag: boolean;
+  newToken: string;
   caller: string;
 }
-export type ShouldRequireClaimEvent = TypedEvent<
-  [BigNumber, boolean, string],
-  ShouldRequireClaimEventObject
->;
+export type SetEvent = TypedEvent<[BigNumber, string, string], SetEventObject>;
 
-export type ShouldRequireClaimEventFilter =
-  TypedEventFilter<ShouldRequireClaimEvent>;
+export type SetEventFilter = TypedEventFilter<SetEvent>;
 
 export interface TransferEventObject {
   holder: string;
@@ -341,20 +307,6 @@ export interface JBTokenStore extends BaseContract {
     ): Promise<ContractTransaction>;
 
     /**
-     * Only a project's current controller can change its token.This contract must have access to all of the token's `IJBToken` interface functions.Can't change to a token that's currently being used by another project.Changing to the zero address will remove the current token without adding a new one.
-     * Swap the current project's token for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token. Send an empty address to remove the project's current token without adding a new one, if claiming tokens isn't currency required by the project
-     */
-    changeFor(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    /**
      * Only a token holder or an operator specified by the token holder can claim its unclaimed tokens.
      * Claims internally accounted for tokens into a holder's wallet.
      * @param _amount The amount of tokens to claim.
@@ -374,7 +326,12 @@ export interface JBTokenStore extends BaseContract {
     directory(overrides?: CallOverrides): Promise<[string]>;
 
     /**
-     * Deploys a project's ERC-20 token contract.Only a project's current controller can issue its token.
+     * The contract storing all funding cycle configurations.
+     */
+    fundingCycleStore(overrides?: CallOverrides): Promise<[string]>;
+
+    /**
+     * Deploys a project's ERC-20 token contract.Only a project's owner or operator can issue its token.
      * Issues a project's ERC-20 tokens that'll be used when claiming tokens.
      * @param _name The ERC-20's name.
      * @param _projectId The ID of the project being issued tokens.
@@ -409,32 +366,19 @@ export interface JBTokenStore extends BaseContract {
     operatorStore(overrides?: CallOverrides): Promise<[string]>;
 
     /**
-     * The ID of the project that each token belongs to. _token The token to check the project association of.
-     */
-    projectOf(arg0: string, overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    /**
      * Mints ERC-721's that represent project ownership and transfers.
      */
     projects(overrides?: CallOverrides): Promise<[string]>;
 
     /**
-     * A flag indicating if tokens are required to be issued as claimed for a particular project. _projectId The ID of the project to which the requirement applies.
+     * Only a project's owner or operator can set its token.
+     * Set a project's token if not already set.
+     * @param _projectId The ID of the project to which the set token belongs.
+     * @param _token The new token.
      */
-    requireClaimFor(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
-
-    /**
-     * Only a token holder or an operator can require claimed token.
-     * Allows a project to force all future mints of its tokens to be claimed into the holder's wallet, or revoke the flag if it's already set.
-     * @param _flag A flag indicating whether or not claiming should be required.
-     * @param _projectId The ID of the project being affected.
-     */
-    shouldRequireClaimingFor(
+    setFor(
       _projectId: BigNumberish,
-      _flag: boolean,
+      _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -514,20 +458,6 @@ export interface JBTokenStore extends BaseContract {
   ): Promise<ContractTransaction>;
 
   /**
-   * Only a project's current controller can change its token.This contract must have access to all of the token's `IJBToken` interface functions.Can't change to a token that's currently being used by another project.Changing to the zero address will remove the current token without adding a new one.
-   * Swap the current project's token for another, and transfer ownership of the current token to another address if needed.
-   * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-   * @param _projectId The ID of the project to which the changed token belongs.
-   * @param _token The new token. Send an empty address to remove the project's current token without adding a new one, if claiming tokens isn't currency required by the project
-   */
-  changeFor(
-    _projectId: BigNumberish,
-    _token: string,
-    _newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  /**
    * Only a token holder or an operator specified by the token holder can claim its unclaimed tokens.
    * Claims internally accounted for tokens into a holder's wallet.
    * @param _amount The amount of tokens to claim.
@@ -547,7 +477,12 @@ export interface JBTokenStore extends BaseContract {
   directory(overrides?: CallOverrides): Promise<string>;
 
   /**
-   * Deploys a project's ERC-20 token contract.Only a project's current controller can issue its token.
+   * The contract storing all funding cycle configurations.
+   */
+  fundingCycleStore(overrides?: CallOverrides): Promise<string>;
+
+  /**
+   * Deploys a project's ERC-20 token contract.Only a project's owner or operator can issue its token.
    * Issues a project's ERC-20 tokens that'll be used when claiming tokens.
    * @param _name The ERC-20's name.
    * @param _projectId The ID of the project being issued tokens.
@@ -582,32 +517,19 @@ export interface JBTokenStore extends BaseContract {
   operatorStore(overrides?: CallOverrides): Promise<string>;
 
   /**
-   * The ID of the project that each token belongs to. _token The token to check the project association of.
-   */
-  projectOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-  /**
    * Mints ERC-721's that represent project ownership and transfers.
    */
   projects(overrides?: CallOverrides): Promise<string>;
 
   /**
-   * A flag indicating if tokens are required to be issued as claimed for a particular project. _projectId The ID of the project to which the requirement applies.
+   * Only a project's owner or operator can set its token.
+   * Set a project's token if not already set.
+   * @param _projectId The ID of the project to which the set token belongs.
+   * @param _token The new token.
    */
-  requireClaimFor(
-    arg0: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
-
-  /**
-   * Only a token holder or an operator can require claimed token.
-   * Allows a project to force all future mints of its tokens to be claimed into the holder's wallet, or revoke the flag if it's already set.
-   * @param _flag A flag indicating whether or not claiming should be required.
-   * @param _projectId The ID of the project being affected.
-   */
-  shouldRequireClaimingFor(
+  setFor(
     _projectId: BigNumberish,
-    _flag: boolean,
+    _token: string,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -687,20 +609,6 @@ export interface JBTokenStore extends BaseContract {
     ): Promise<void>;
 
     /**
-     * Only a project's current controller can change its token.This contract must have access to all of the token's `IJBToken` interface functions.Can't change to a token that's currently being used by another project.Changing to the zero address will remove the current token without adding a new one.
-     * Swap the current project's token for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token. Send an empty address to remove the project's current token without adding a new one, if claiming tokens isn't currency required by the project
-     */
-    changeFor(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<string>;
-
-    /**
      * Only a token holder or an operator specified by the token holder can claim its unclaimed tokens.
      * Claims internally accounted for tokens into a holder's wallet.
      * @param _amount The amount of tokens to claim.
@@ -720,7 +628,12 @@ export interface JBTokenStore extends BaseContract {
     directory(overrides?: CallOverrides): Promise<string>;
 
     /**
-     * Deploys a project's ERC-20 token contract.Only a project's current controller can issue its token.
+     * The contract storing all funding cycle configurations.
+     */
+    fundingCycleStore(overrides?: CallOverrides): Promise<string>;
+
+    /**
+     * Deploys a project's ERC-20 token contract.Only a project's owner or operator can issue its token.
      * Issues a project's ERC-20 tokens that'll be used when claiming tokens.
      * @param _name The ERC-20's name.
      * @param _projectId The ID of the project being issued tokens.
@@ -755,32 +668,19 @@ export interface JBTokenStore extends BaseContract {
     operatorStore(overrides?: CallOverrides): Promise<string>;
 
     /**
-     * The ID of the project that each token belongs to. _token The token to check the project association of.
-     */
-    projectOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    /**
      * Mints ERC-721's that represent project ownership and transfers.
      */
     projects(overrides?: CallOverrides): Promise<string>;
 
     /**
-     * A flag indicating if tokens are required to be issued as claimed for a particular project. _projectId The ID of the project to which the requirement applies.
+     * Only a project's owner or operator can set its token.
+     * Set a project's token if not already set.
+     * @param _projectId The ID of the project to which the set token belongs.
+     * @param _token The new token.
      */
-    requireClaimFor(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<boolean>;
-
-    /**
-     * Only a token holder or an operator can require claimed token.
-     * Allows a project to force all future mints of its tokens to be claimed into the holder's wallet, or revoke the flag if it's already set.
-     * @param _flag A flag indicating whether or not claiming should be required.
-     * @param _projectId The ID of the project being affected.
-     */
-    shouldRequireClaimingFor(
+    setFor(
       _projectId: BigNumberish,
-      _flag: boolean,
+      _token: string,
       overrides?: CallOverrides
     ): Promise<void>;
 
@@ -852,21 +752,6 @@ export interface JBTokenStore extends BaseContract {
       caller?: null
     ): BurnEventFilter;
 
-    "Change(uint256,address,address,address,address)"(
-      projectId?: BigNumberish | null,
-      newToken?: string | null,
-      oldToken?: string | null,
-      owner?: null,
-      caller?: null
-    ): ChangeEventFilter;
-    Change(
-      projectId?: BigNumberish | null,
-      newToken?: string | null,
-      oldToken?: string | null,
-      owner?: null,
-      caller?: null
-    ): ChangeEventFilter;
-
     "Claim(address,uint256,uint256,uint256,address)"(
       holder?: string | null,
       projectId?: BigNumberish | null,
@@ -914,16 +799,16 @@ export interface JBTokenStore extends BaseContract {
       caller?: null
     ): MintEventFilter;
 
-    "ShouldRequireClaim(uint256,bool,address)"(
+    "Set(uint256,address,address)"(
       projectId?: BigNumberish | null,
-      flag?: boolean | null,
+      newToken?: string | null,
       caller?: null
-    ): ShouldRequireClaimEventFilter;
-    ShouldRequireClaim(
+    ): SetEventFilter;
+    Set(
       projectId?: BigNumberish | null,
-      flag?: boolean | null,
+      newToken?: string | null,
       caller?: null
-    ): ShouldRequireClaimEventFilter;
+    ): SetEventFilter;
 
     "Transfer(address,uint256,address,uint256,address)"(
       holder?: string | null,
@@ -970,20 +855,6 @@ export interface JBTokenStore extends BaseContract {
     ): Promise<BigNumber>;
 
     /**
-     * Only a project's current controller can change its token.This contract must have access to all of the token's `IJBToken` interface functions.Can't change to a token that's currently being used by another project.Changing to the zero address will remove the current token without adding a new one.
-     * Swap the current project's token for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token. Send an empty address to remove the project's current token without adding a new one, if claiming tokens isn't currency required by the project
-     */
-    changeFor(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    /**
      * Only a token holder or an operator specified by the token holder can claim its unclaimed tokens.
      * Claims internally accounted for tokens into a holder's wallet.
      * @param _amount The amount of tokens to claim.
@@ -1003,7 +874,12 @@ export interface JBTokenStore extends BaseContract {
     directory(overrides?: CallOverrides): Promise<BigNumber>;
 
     /**
-     * Deploys a project's ERC-20 token contract.Only a project's current controller can issue its token.
+     * The contract storing all funding cycle configurations.
+     */
+    fundingCycleStore(overrides?: CallOverrides): Promise<BigNumber>;
+
+    /**
+     * Deploys a project's ERC-20 token contract.Only a project's owner or operator can issue its token.
      * Issues a project's ERC-20 tokens that'll be used when claiming tokens.
      * @param _name The ERC-20's name.
      * @param _projectId The ID of the project being issued tokens.
@@ -1038,32 +914,19 @@ export interface JBTokenStore extends BaseContract {
     operatorStore(overrides?: CallOverrides): Promise<BigNumber>;
 
     /**
-     * The ID of the project that each token belongs to. _token The token to check the project association of.
-     */
-    projectOf(arg0: string, overrides?: CallOverrides): Promise<BigNumber>;
-
-    /**
      * Mints ERC-721's that represent project ownership and transfers.
      */
     projects(overrides?: CallOverrides): Promise<BigNumber>;
 
     /**
-     * A flag indicating if tokens are required to be issued as claimed for a particular project. _projectId The ID of the project to which the requirement applies.
+     * Only a project's owner or operator can set its token.
+     * Set a project's token if not already set.
+     * @param _projectId The ID of the project to which the set token belongs.
+     * @param _token The new token.
      */
-    requireClaimFor(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    /**
-     * Only a token holder or an operator can require claimed token.
-     * Allows a project to force all future mints of its tokens to be claimed into the holder's wallet, or revoke the flag if it's already set.
-     * @param _flag A flag indicating whether or not claiming should be required.
-     * @param _projectId The ID of the project being affected.
-     */
-    shouldRequireClaimingFor(
+    setFor(
       _projectId: BigNumberish,
-      _flag: boolean,
+      _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -1144,20 +1007,6 @@ export interface JBTokenStore extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     /**
-     * Only a project's current controller can change its token.This contract must have access to all of the token's `IJBToken` interface functions.Can't change to a token that's currently being used by another project.Changing to the zero address will remove the current token without adding a new one.
-     * Swap the current project's token for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token. Send an empty address to remove the project's current token without adding a new one, if claiming tokens isn't currency required by the project
-     */
-    changeFor(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    /**
      * Only a token holder or an operator specified by the token holder can claim its unclaimed tokens.
      * Claims internally accounted for tokens into a holder's wallet.
      * @param _amount The amount of tokens to claim.
@@ -1177,7 +1026,12 @@ export interface JBTokenStore extends BaseContract {
     directory(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     /**
-     * Deploys a project's ERC-20 token contract.Only a project's current controller can issue its token.
+     * The contract storing all funding cycle configurations.
+     */
+    fundingCycleStore(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    /**
+     * Deploys a project's ERC-20 token contract.Only a project's owner or operator can issue its token.
      * Issues a project's ERC-20 tokens that'll be used when claiming tokens.
      * @param _name The ERC-20's name.
      * @param _projectId The ID of the project being issued tokens.
@@ -1212,35 +1066,19 @@ export interface JBTokenStore extends BaseContract {
     operatorStore(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     /**
-     * The ID of the project that each token belongs to. _token The token to check the project association of.
-     */
-    projectOf(
-      arg0: string,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    /**
      * Mints ERC-721's that represent project ownership and transfers.
      */
     projects(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     /**
-     * A flag indicating if tokens are required to be issued as claimed for a particular project. _projectId The ID of the project to which the requirement applies.
+     * Only a project's owner or operator can set its token.
+     * Set a project's token if not already set.
+     * @param _projectId The ID of the project to which the set token belongs.
+     * @param _token The new token.
      */
-    requireClaimFor(
-      arg0: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    /**
-     * Only a token holder or an operator can require claimed token.
-     * Allows a project to force all future mints of its tokens to be claimed into the holder's wallet, or revoke the flag if it's already set.
-     * @param _flag A flag indicating whether or not claiming should be required.
-     * @param _projectId The ID of the project being affected.
-     */
-    shouldRequireClaimingFor(
+    setFor(
       _projectId: BigNumberish,
-      _flag: boolean,
+      _token: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

@@ -18,8 +18,6 @@ export type { JBSingleTokenPaymentTerminalStore } from "./JBSingleTokenPaymentTe
 export type { JBSplitsStore } from "./JBSplitsStore";
 export type { JBTokenStore } from "./JBTokenStore";
 export * as factories from "./factories";
-export { JB3DayReconfigurationBufferBallot__factory } from "./factories/JB3DayReconfigurationBufferBallot__factory";
-export { JB7DayReconfigurationBufferBallot__factory } from "./factories/JB7DayReconfigurationBufferBallot__factory";
 export { JBChainlinkV3PriceFeed__factory } from "./factories/JBChainlinkV3PriceFeed__factory";
 export { JBController__factory } from "./factories/JBController__factory";
 export { JBCurrencies__factory } from "./factories/JBCurrencies__factory";

@@ -1,5 +1,5 @@
 {
-  "name": "juice-sdk",
+  "name": "juice-sdk-v3",
   "version": "2.1.0-alpha",
   "repository": "git@github.com:aeolianeth/juice-sdk.git",
   "license": "MIT",
@@ -17,11 +17,12 @@
     "postbrowser:build": "rollup -c rollup.config.js",
     "node:build": "tsc --project ./tsconfig.node.json",
     "dev": "tsc --watch",
-    "generate-types": "typechain --target=ethers-v5 './node_modules/@jbx-protocol/contracts-v2/deployments/mainnet/*.json' --out-dir='src/types/contracts'",
+    "generate-types": "typechain --target=ethers-v5 '../../node_modules/@jbx-protocol/juice-contracts-v3/deployments/mainnet/*.json' --out-dir='src/types/contracts'",
     "generate-index": "node scripts/generateIndexFile.js && prettier src/index.ts --write"
   },
   "devDependencies": {
     "@jbx-protocol/contracts-v2": "8.0.1",
+    "@jbx-protocol/juice-contracts-v3": "^2.0.0",
     "@rollup/plugin-commonjs": "22.0.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "13.3.0",
@@ -34,6 +35,7 @@
   },
   "peerDependencies": {
     "@jbx-protocol/contracts-v2": "8.0.1",
+    "@jbx-protocol/juice-contracts-v3": "^2.0.0",
     "ethers": ">=5.5.0"
   }
 }

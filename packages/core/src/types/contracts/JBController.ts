@@ -116,11 +116,17 @@ export type JBFundingCycleStructOutput = [
 export type JBGlobalFundingCycleMetadataStruct = {
   allowSetTerminals: boolean;
   allowSetController: boolean;
+  pauseTransfers: boolean;
 };
 
-export type JBGlobalFundingCycleMetadataStructOutput = [boolean, boolean] & {
+export type JBGlobalFundingCycleMetadataStructOutput = [
+  boolean,
+  boolean,
+  boolean
+] & {
   allowSetTerminals: boolean;
   allowSetController: boolean;
+  pauseTransfers: boolean;
 };
 
 export type JBFundingCycleMetadataStruct = {
@@ -133,14 +139,15 @@ export type JBFundingCycleMetadataStruct = {
   pauseRedeem: boolean;
   pauseBurn: boolean;
   allowMinting: boolean;
-  allowChangeToken: boolean;
   allowTerminalMigration: boolean;
   allowControllerMigration: boolean;
   holdFees: boolean;
+  preferClaimedTokenOverride: boolean;
   useTotalOverflowForRedemptions: boolean;
   useDataSourceForPay: boolean;
   useDataSourceForRedeem: boolean;
   dataSource: string;
+  metadata: BigNumberish;
 };
 
 export type JBFundingCycleMetadataStructOutput = [
@@ -160,7 +167,8 @@ export type JBFundingCycleMetadataStructOutput = [
   boolean,
   boolean,
   boolean,
-  string
+  string,
+  BigNumber
 ] & {
   global: JBGlobalFundingCycleMetadataStructOutput;
   reservedRate: BigNumber;
@@ -171,14 +179,15 @@ export type JBFundingCycleMetadataStructOutput = [
   pauseRedeem: boolean;
   pauseBurn: boolean;
   allowMinting: boolean;
-  allowChangeToken: boolean;
   allowTerminalMigration: boolean;
   allowControllerMigration: boolean;
   holdFees: boolean;
+  preferClaimedTokenOverride: boolean;
   useTotalOverflowForRedemptions: boolean;
   useDataSourceForPay: boolean;
   useDataSourceForRedeem: boolean;
   dataSource: string;
+  metadata: BigNumber;
 };
 
 export type JBFundingCycleDataStruct = {
@@ -220,17 +229,15 @@ export type JBProjectMetadataStructOutput = [string, BigNumber] & {
 export interface JBControllerInterface extends utils.Interface {
   functions: {
     "burnTokensOf(address,uint256,uint256,string,bool)": FunctionFragment;
-    "changeTokenOf(uint256,address,address)": FunctionFragment;
     "currentFundingCycleOf(uint256)": FunctionFragment;
     "directory()": FunctionFragment;
     "distributeReservedTokensOf(uint256,string)": FunctionFragment;
     "distributionLimitOf(uint256,uint256,address,address)": FunctionFragment;
     "fundingCycleStore()": FunctionFragment;
     "getFundingCycleOf(uint256,uint256)": FunctionFragment;
-    "issueTokenFor(uint256,string,string)": FunctionFragment;
     "latestConfiguredFundingCycleOf(uint256)": FunctionFragment;
-    "launchFundingCyclesFor(uint256,(uint256,uint256,uint256,address),((bool,bool),uint256,uint256,uint256,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,address),uint256,(uint256,(bool,bool,uint256,uint256,address,uint256,address)[])[],(address,address,uint256,uint256,uint256,uint256)[],address[],string)": FunctionFragment;
-    "launchProjectFor(address,(string,uint256),(uint256,uint256,uint256,address),((bool,bool),uint256,uint256,uint256,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,address),uint256,(uint256,(bool,bool,uint256,uint256,address,uint256,address)[])[],(address,address,uint256,uint256,uint256,uint256)[],address[],string)": FunctionFragment;
+    "launchFundingCyclesFor(uint256,(uint256,uint256,uint256,address),((bool,bool,bool),uint256,uint256,uint256,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,address,uint256),uint256,(uint256,(bool,bool,uint256,uint256,address,uint256,address)[])[],(address,address,uint256,uint256,uint256,uint256)[],address[],string)": FunctionFragment;
+    "launchProjectFor(address,(string,uint256),(uint256,uint256,uint256,address),((bool,bool,bool),uint256,uint256,uint256,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,address,uint256),uint256,(uint256,(bool,bool,uint256,uint256,address,uint256,address)[])[],(address,address,uint256,uint256,uint256,uint256)[],address[],string)": FunctionFragment;
     "migrate(uint256,address)": FunctionFragment;
     "mintTokensOf(uint256,uint256,address,string,bool,bool)": FunctionFragment;
     "operatorStore()": FunctionFragment;
@@ -238,7 +245,7 @@ export interface JBControllerInterface extends utils.Interface {
     "prepForMigrationOf(uint256,address)": FunctionFragment;
     "projects()": FunctionFragment;
     "queuedFundingCycleOf(uint256)": FunctionFragment;
-    "reconfigureFundingCyclesOf(uint256,(uint256,uint256,uint256,address),((bool,bool),uint256,uint256,uint256,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,address),uint256,(uint256,(bool,bool,uint256,uint256,address,uint256,address)[])[],(address,address,uint256,uint256,uint256,uint256)[],string)": FunctionFragment;
+    "reconfigureFundingCyclesOf(uint256,(uint256,uint256,uint256,address),((bool,bool,bool),uint256,uint256,uint256,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,bool,address,uint256),uint256,(uint256,(bool,bool,uint256,uint256,address,uint256,address)[])[],(address,address,uint256,uint256,uint256,uint256)[],string)": FunctionFragment;
     "reservedTokenBalanceOf(uint256,uint256)": FunctionFragment;
     "splitsStore()": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
@@ -249,14 +256,12 @@ export interface JBControllerInterface extends utils.Interface {
   getFunction(
     nameOrSignatureOrTopic:
       | "burnTokensOf"
-      | "changeTokenOf"
       | "currentFundingCycleOf"
       | "directory"
       | "distributeReservedTokensOf"
       | "distributionLimitOf"
       | "fundingCycleStore"
       | "getFundingCycleOf"
-      | "issueTokenFor"
       | "latestConfiguredFundingCycleOf"
       | "launchFundingCyclesFor"
       | "launchProjectFor"
@@ -280,10 +285,6 @@ export interface JBControllerInterface extends utils.Interface {
     values: [string, BigNumberish, BigNumberish, string, boolean]
   ): string;
   encodeFunctionData(
-    functionFragment: "changeTokenOf",
-    values: [BigNumberish, string, string]
-  ): string;
-  encodeFunctionData(
     functionFragment: "currentFundingCycleOf",
     values: [BigNumberish]
   ): string;
@@ -303,10 +304,6 @@ export interface JBControllerInterface extends utils.Interface {
   encodeFunctionData(
     functionFragment: "getFundingCycleOf",
     values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "issueTokenFor",
-    values: [BigNumberish, string, string]
   ): string;
   encodeFunctionData(
     functionFragment: "latestConfiguredFundingCycleOf",
@@ -402,10 +399,6 @@ export interface JBControllerInterface extends utils.Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "changeTokenOf",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "currentFundingCycleOf",
     data: BytesLike
   ): Result;
@@ -424,10 +417,6 @@ export interface JBControllerInterface extends utils.Interface {
   ): Result;
   decodeFunctionResult(
     functionFragment: "getFundingCycleOf",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "issueTokenFor",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -718,20 +707,6 @@ export interface JBController extends BaseContract {
     ): Promise<ContractTransaction>;
 
     /**
-     * Only a project's owner or operator can change its token.
-     * Swap the current project's token that is minted and burned for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token.
-     */
-    changeTokenOf(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    /**
      * A project's current funding cycle along with its metadata.
      * @param _projectId The ID of the project to which the funding cycle belongs.
      */
@@ -796,20 +771,6 @@ export interface JBController extends BaseContract {
         metadata: JBFundingCycleMetadataStructOutput;
       }
     >;
-
-    /**
-     * Deploys a project's ERC20 JBToken contract.Only a project's owner or operator can issue its token.
-     * Issues an owner's ERC20 JBTokens that'll be used when claiming tokens.
-     * @param _name The ERC20's name.
-     * @param _projectId The ID of the project being issued tokens.
-     * @param _symbol The ERC20's symbol.
-     */
-    issueTokenFor(
-      _projectId: BigNumberish,
-      _name: string,
-      _symbol: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
 
     /**
      * A project's latest configured funding cycle along with its metadata and the ballot state of the configuration.
@@ -1012,20 +973,6 @@ export interface JBController extends BaseContract {
   ): Promise<ContractTransaction>;
 
   /**
-   * Only a project's owner or operator can change its token.
-   * Swap the current project's token that is minted and burned for another, and transfer ownership of the current token to another address if needed.
-   * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-   * @param _projectId The ID of the project to which the changed token belongs.
-   * @param _token The new token.
-   */
-  changeTokenOf(
-    _projectId: BigNumberish,
-    _token: string,
-    _newOwner: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  /**
    * A project's current funding cycle along with its metadata.
    * @param _projectId The ID of the project to which the funding cycle belongs.
    */
@@ -1090,20 +1037,6 @@ export interface JBController extends BaseContract {
       metadata: JBFundingCycleMetadataStructOutput;
     }
   >;
-
-  /**
-   * Deploys a project's ERC20 JBToken contract.Only a project's owner or operator can issue its token.
-   * Issues an owner's ERC20 JBTokens that'll be used when claiming tokens.
-   * @param _name The ERC20's name.
-   * @param _projectId The ID of the project being issued tokens.
-   * @param _symbol The ERC20's symbol.
-   */
-  issueTokenFor(
-    _projectId: BigNumberish,
-    _name: string,
-    _symbol: string,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
 
   /**
    * A project's latest configured funding cycle along with its metadata and the ballot state of the configuration.
@@ -1302,20 +1235,6 @@ export interface JBController extends BaseContract {
     ): Promise<void>;
 
     /**
-     * Only a project's owner or operator can change its token.
-     * Swap the current project's token that is minted and burned for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token.
-     */
-    changeTokenOf(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: CallOverrides
-    ): Promise<void>;
-
-    /**
      * A project's current funding cycle along with its metadata.
      * @param _projectId The ID of the project to which the funding cycle belongs.
      */
@@ -1380,20 +1299,6 @@ export interface JBController extends BaseContract {
         metadata: JBFundingCycleMetadataStructOutput;
       }
     >;
-
-    /**
-     * Deploys a project's ERC20 JBToken contract.Only a project's owner or operator can issue its token.
-     * Issues an owner's ERC20 JBTokens that'll be used when claiming tokens.
-     * @param _name The ERC20's name.
-     * @param _projectId The ID of the project being issued tokens.
-     * @param _symbol The ERC20's symbol.
-     */
-    issueTokenFor(
-      _projectId: BigNumberish,
-      _name: string,
-      _symbol: string,
-      overrides?: CallOverrides
-    ): Promise<string>;
 
     /**
      * A project's latest configured funding cycle along with its metadata and the ballot state of the configuration.
@@ -1747,20 +1652,6 @@ export interface JBController extends BaseContract {
     ): Promise<BigNumber>;
 
     /**
-     * Only a project's owner or operator can change its token.
-     * Swap the current project's token that is minted and burned for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token.
-     */
-    changeTokenOf(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    /**
      * A project's current funding cycle along with its metadata.
      * @param _projectId The ID of the project to which the funding cycle belongs.
      */
@@ -1814,20 +1705,6 @@ export interface JBController extends BaseContract {
       _projectId: BigNumberish,
       _configuration: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    /**
-     * Deploys a project's ERC20 JBToken contract.Only a project's owner or operator can issue its token.
-     * Issues an owner's ERC20 JBTokens that'll be used when claiming tokens.
-     * @param _name The ERC20's name.
-     * @param _projectId The ID of the project being issued tokens.
-     * @param _symbol The ERC20's symbol.
-     */
-    issueTokenFor(
-      _projectId: BigNumberish,
-      _name: string,
-      _symbol: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     /**
@@ -2017,20 +1894,6 @@ export interface JBController extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     /**
-     * Only a project's owner or operator can change its token.
-     * Swap the current project's token that is minted and burned for another, and transfer ownership of the current token to another address if needed.
-     * @param _newOwner An address to transfer the current token's ownership to. This is optional, but it cannot be done later.
-     * @param _projectId The ID of the project to which the changed token belongs.
-     * @param _token The new token.
-     */
-    changeTokenOf(
-      _projectId: BigNumberish,
-      _token: string,
-      _newOwner: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    /**
      * A project's current funding cycle along with its metadata.
      * @param _projectId The ID of the project to which the funding cycle belongs.
      */
@@ -2084,20 +1947,6 @@ export interface JBController extends BaseContract {
       _projectId: BigNumberish,
       _configuration: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    /**
-     * Deploys a project's ERC20 JBToken contract.Only a project's owner or operator can issue its token.
-     * Issues an owner's ERC20 JBTokens that'll be used when claiming tokens.
-     * @param _name The ERC20's name.
-     * @param _projectId The ID of the project being issued tokens.
-     * @param _symbol The ERC20's symbol.
-     */
-    issueTokenFor(
-      _projectId: BigNumberish,
-      _name: string,
-      _symbol: string,
-      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     /**
