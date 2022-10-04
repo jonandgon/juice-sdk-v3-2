@@ -53,17 +53,25 @@ import {
   address as JBProjectsAddress_mainnet,
 } from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/JBProjects.json';
 import {
+  abi as JBChainlinkV3PriceFeedABI_mainnet,
+  address as JBChainlinkV3PriceFeedAddress_mainnet,
+} from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/JBChainlinkV3PriceFeed.json';
+import {
   abi as JBETHERC20SplitsPayerDeployerABI_mainnet,
   address as JBETHERC20SplitsPayerDeployerAddress_mainnet,
 } from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/JBETHERC20SplitsPayerDeployer.json';
 import {
+  abi as JB1DayReconfigurationBufferBallotABI_mainnet,
+  address as JB1DayReconfigurationBufferBallotAddress_mainnet,
+} from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/JB1DayReconfigurationBufferBallot.json';
+import {
   abi as JB3DayReconfigurationBufferBallotABI_mainnet,
   address as JB3DayReconfigurationBufferBallotAddress_mainnet,
-} from '@jbx-protocol/contracts-v2/deployments/mainnet/JB3DayReconfigurationBufferBallot.json';
+} from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/JB3DayReconfigurationBufferBallot.json';
 import {
   abi as JB7DayReconfigurationBufferBallotABI_mainnet,
   address as JB7DayReconfigurationBufferBallotAddress_mainnet,
-} from '@jbx-protocol/contracts-v2/deployments/mainnet/JB7DayReconfigurationBufferBallot.json';
+} from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/JB7DayReconfigurationBufferBallot.json';
 import {
   abi as JBETHPaymentTerminalABI_goerli,
   address as JBETHPaymentTerminalAddress_goerli,
@@ -113,9 +121,17 @@ import {
   address as JBProjectsAddress_goerli,
 } from '@jbx-protocol/juice-contracts-v3/deployments/goerli/JBProjects.json';
 import {
+  abi as JBChainlinkV3PriceFeedABI_goerli,
+  address as JBChainlinkV3PriceFeedAddress_goerli,
+} from '@jbx-protocol/juice-contracts-v3/deployments/goerli/JBChainlinkV3PriceFeed.json';
+import {
   abi as JBETHERC20SplitsPayerDeployerABI_goerli,
   address as JBETHERC20SplitsPayerDeployerAddress_goerli,
 } from '@jbx-protocol/juice-contracts-v3/deployments/goerli/JBETHERC20SplitsPayerDeployer.json';
+import {
+  abi as JB1DayReconfigurationBufferBallotABI_goerli,
+  address as JB1DayReconfigurationBufferBallotAddress_goerli,
+} from '@jbx-protocol/juice-contracts-v3/deployments/goerli/JB1DayReconfigurationBufferBallot.json';
 import {
   abi as JB3DayReconfigurationBufferBallotABI_goerli,
   address as JB3DayReconfigurationBufferBallotAddress_goerli,
@@ -137,7 +153,9 @@ import {
   JBPrices,
   JBETHERC20ProjectPayerDeployer,
   JBProjects,
+  JBChainlinkV3PriceFeed,
   JBETHERC20SplitsPayerDeployer,
+  JB1DayReconfigurationBufferBallot,
   JB3DayReconfigurationBufferBallot,
   JB7DayReconfigurationBufferBallot,
 } from './types/contracts';
@@ -154,7 +172,9 @@ export {
   JBPrices,
   JBETHERC20ProjectPayerDeployer,
   JBProjects,
+  JBChainlinkV3PriceFeed,
   JBETHERC20SplitsPayerDeployer,
+  JB1DayReconfigurationBufferBallot,
   JB3DayReconfigurationBufferBallot,
   JB7DayReconfigurationBufferBallot,
 } from './types/contracts';
@@ -298,6 +318,19 @@ export const getJBProjects = (
     network === 'goerli' ? JBProjectsABI_goerli : JBProjectsABI_mainnet,
     signerOrProvider,
   ) as JBProjects;
+export const getJBChainlinkV3PriceFeed = (
+  signerOrProvider: SignerOrProvider,
+  { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
+) =>
+  new Contract(
+    network === 'goerli'
+      ? JBChainlinkV3PriceFeedAddress_goerli
+      : JBChainlinkV3PriceFeedAddress_mainnet,
+    network === 'goerli'
+      ? JBChainlinkV3PriceFeedABI_goerli
+      : JBChainlinkV3PriceFeedABI_mainnet,
+    signerOrProvider,
+  ) as JBChainlinkV3PriceFeed;
 export const getJBETHERC20SplitsPayerDeployer = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -311,6 +344,19 @@ export const getJBETHERC20SplitsPayerDeployer = (
       : JBETHERC20SplitsPayerDeployerABI_mainnet,
     signerOrProvider,
   ) as JBETHERC20SplitsPayerDeployer;
+export const getJB1DayReconfigurationBufferBallot = (
+  signerOrProvider: SignerOrProvider,
+  { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
+) =>
+  new Contract(
+    network === 'goerli'
+      ? JB1DayReconfigurationBufferBallotAddress_goerli
+      : JB1DayReconfigurationBufferBallotAddress_mainnet,
+    network === 'goerli'
+      ? JB1DayReconfigurationBufferBallotABI_goerli
+      : JB1DayReconfigurationBufferBallotABI_mainnet,
+    signerOrProvider,
+  ) as JB1DayReconfigurationBufferBallot;
 export const getJB3DayReconfigurationBufferBallot = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },

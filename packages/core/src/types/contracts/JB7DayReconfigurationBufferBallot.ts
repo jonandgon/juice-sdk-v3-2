@@ -7,17 +7,11 @@ import type {
   BigNumberish,
   BytesLike,
   CallOverrides,
-  ContractTransaction,
-  Overrides,
   PopulatedTransaction,
   Signer,
   utils,
 } from "ethers";
-import type {
-  FunctionFragment,
-  Result,
-  EventFragment,
-} from "@ethersproject/abi";
+import type { FunctionFragment, Result } from "@ethersproject/abi";
 import type { Listener, Provider } from "@ethersproject/providers";
 import type {
   TypedEventFilter,
@@ -30,36 +24,15 @@ export interface JB7DayReconfigurationBufferBallotInterface
   extends utils.Interface {
   functions: {
     "duration()": FunctionFragment;
-    "finalState(uint256,uint256)": FunctionFragment;
-    "finalize(uint256,uint256)": FunctionFragment;
-    "fundingCycleStore()": FunctionFragment;
     "stateOf(uint256,uint256,uint256)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
   };
 
   getFunction(
-    nameOrSignatureOrTopic:
-      | "duration"
-      | "finalState"
-      | "finalize"
-      | "fundingCycleStore"
-      | "stateOf"
-      | "supportsInterface"
+    nameOrSignatureOrTopic: "duration" | "stateOf" | "supportsInterface"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "duration", values?: undefined): string;
-  encodeFunctionData(
-    functionFragment: "finalState",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "finalize",
-    values: [BigNumberish, BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "fundingCycleStore",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "stateOf",
     values: [BigNumberish, BigNumberish, BigNumberish]
@@ -70,37 +43,14 @@ export interface JB7DayReconfigurationBufferBallotInterface
   ): string;
 
   decodeFunctionResult(functionFragment: "duration", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "finalState", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "finalize", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "fundingCycleStore",
-    data: BytesLike
-  ): Result;
   decodeFunctionResult(functionFragment: "stateOf", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
   ): Result;
 
-  events: {
-    "Finalize(uint256,uint256,uint8,address)": EventFragment;
-  };
-
-  getEvent(nameOrSignatureOrTopic: "Finalize"): EventFragment;
+  events: {};
 }
-
-export interface FinalizeEventObject {
-  projectId: BigNumber;
-  configuration: BigNumber;
-  ballotState: number;
-  caller: string;
-}
-export type FinalizeEvent = TypedEvent<
-  [BigNumber, BigNumber, number, string],
-  FinalizeEventObject
->;
-
-export type FinalizeEventFilter = TypedEventFilter<FinalizeEvent>;
 
 export interface JB7DayReconfigurationBufferBallot extends BaseContract {
   connect(signerOrProvider: Signer | Provider | string): this;
@@ -135,31 +85,6 @@ export interface JB7DayReconfigurationBufferBallot extends BaseContract {
     duration(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     /**
-     *  The finalized state.
-     */
-    finalState(
-      arg0: BigNumberish,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<[number]>;
-
-    /**
-     *  Finalizes a configuration state if the current state has settled.
-     * @param _configured The configuration of the funding cycle to check the state of.
-     * @param _projectId The ID of the project to which the funding cycle being checked belongs.
-     */
-    finalize(
-      _projectId: BigNumberish,
-      _configured: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
-
-    /**
-     * The contract storing all funding cycle configurations.
-     */
-    fundingCycleStore(overrides?: CallOverrides): Promise<[string]>;
-
-    /**
      *  The approval state of a particular funding cycle.
      * @param _configured The configuration of the funding cycle to check the state of.
      * @param _projectId The ID of the project to which the funding cycle being checked belongs.
@@ -187,31 +112,6 @@ export interface JB7DayReconfigurationBufferBallot extends BaseContract {
    *  The number of seconds that must pass for a funding cycle reconfiguration to become either `Approved` or `Failed`.
    */
   duration(overrides?: CallOverrides): Promise<BigNumber>;
-
-  /**
-   *  The finalized state.
-   */
-  finalState(
-    arg0: BigNumberish,
-    arg1: BigNumberish,
-    overrides?: CallOverrides
-  ): Promise<number>;
-
-  /**
-   *  Finalizes a configuration state if the current state has settled.
-   * @param _configured The configuration of the funding cycle to check the state of.
-   * @param _projectId The ID of the project to which the funding cycle being checked belongs.
-   */
-  finalize(
-    _projectId: BigNumberish,
-    _configured: BigNumberish,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
-
-  /**
-   * The contract storing all funding cycle configurations.
-   */
-  fundingCycleStore(overrides?: CallOverrides): Promise<string>;
 
   /**
    *  The approval state of a particular funding cycle.
@@ -243,31 +143,6 @@ export interface JB7DayReconfigurationBufferBallot extends BaseContract {
     duration(overrides?: CallOverrides): Promise<BigNumber>;
 
     /**
-     *  The finalized state.
-     */
-    finalState(
-      arg0: BigNumberish,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    /**
-     *  Finalizes a configuration state if the current state has settled.
-     * @param _configured The configuration of the funding cycle to check the state of.
-     * @param _projectId The ID of the project to which the funding cycle being checked belongs.
-     */
-    finalize(
-      _projectId: BigNumberish,
-      _configured: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<number>;
-
-    /**
-     * The contract storing all funding cycle configurations.
-     */
-    fundingCycleStore(overrides?: CallOverrides): Promise<string>;
-
-    /**
      *  The approval state of a particular funding cycle.
      * @param _configured The configuration of the funding cycle to check the state of.
      * @param _projectId The ID of the project to which the funding cycle being checked belongs.
@@ -291,51 +166,13 @@ export interface JB7DayReconfigurationBufferBallot extends BaseContract {
     ): Promise<boolean>;
   };
 
-  filters: {
-    "Finalize(uint256,uint256,uint8,address)"(
-      projectId?: BigNumberish | null,
-      configuration?: BigNumberish | null,
-      ballotState?: BigNumberish | null,
-      caller?: null
-    ): FinalizeEventFilter;
-    Finalize(
-      projectId?: BigNumberish | null,
-      configuration?: BigNumberish | null,
-      ballotState?: BigNumberish | null,
-      caller?: null
-    ): FinalizeEventFilter;
-  };
+  filters: {};
 
   estimateGas: {
     /**
      *  The number of seconds that must pass for a funding cycle reconfiguration to become either `Approved` or `Failed`.
      */
     duration(overrides?: CallOverrides): Promise<BigNumber>;
-
-    /**
-     *  The finalized state.
-     */
-    finalState(
-      arg0: BigNumberish,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<BigNumber>;
-
-    /**
-     *  Finalizes a configuration state if the current state has settled.
-     * @param _configured The configuration of the funding cycle to check the state of.
-     * @param _projectId The ID of the project to which the funding cycle being checked belongs.
-     */
-    finalize(
-      _projectId: BigNumberish,
-      _configured: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<BigNumber>;
-
-    /**
-     * The contract storing all funding cycle configurations.
-     */
-    fundingCycleStore(overrides?: CallOverrides): Promise<BigNumber>;
 
     /**
      *  The approval state of a particular funding cycle.
@@ -366,31 +203,6 @@ export interface JB7DayReconfigurationBufferBallot extends BaseContract {
      *  The number of seconds that must pass for a funding cycle reconfiguration to become either `Approved` or `Failed`.
      */
     duration(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    /**
-     *  The finalized state.
-     */
-    finalState(
-      arg0: BigNumberish,
-      arg1: BigNumberish,
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    /**
-     *  Finalizes a configuration state if the current state has settled.
-     * @param _configured The configuration of the funding cycle to check the state of.
-     * @param _projectId The ID of the project to which the funding cycle being checked belongs.
-     */
-    finalize(
-      _projectId: BigNumberish,
-      _configured: BigNumberish,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<PopulatedTransaction>;
-
-    /**
-     * The contract storing all funding cycle configurations.
-     */
-    fundingCycleStore(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     /**
      *  The approval state of a particular funding cycle.

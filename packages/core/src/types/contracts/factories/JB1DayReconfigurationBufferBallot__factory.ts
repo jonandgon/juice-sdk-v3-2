@@ -11,9 +11,9 @@ import {
 } from "ethers";
 import type { Provider, TransactionRequest } from "@ethersproject/providers";
 import type {
-  JB3DayReconfigurationBufferBallot,
-  JB3DayReconfigurationBufferBallotInterface,
-} from "../JB3DayReconfigurationBufferBallot";
+  JB1DayReconfigurationBufferBallot,
+  JB1DayReconfigurationBufferBallotInterface,
+} from "../JB1DayReconfigurationBufferBallot";
 
 const _abi = [
   {
@@ -93,16 +93,16 @@ const _abi = [
 const _bytecode =
   "0x60a060405234801561001057600080fd5b5060405161030138038061030183398101604081905261002f91610037565b608052610050565b60006020828403121561004957600080fd5b5051919050565b608051610290610071600039600081816073015261017001526102906000f3fe608060405234801561001057600080fd5b50600436106100415760003560e01c806301ffc9a7146100465780630fb5a6b41461006e57806374167907146100a3575b600080fd5b6100596100543660046101ab565b6100c3565b60405190151581526020015b60405180910390f35b6100957f000000000000000000000000000000000000000000000000000000000000000081565b604051908152602001610065565b6100b66100b13660046101ed565b61015c565b6040516100659190610219565b60007fffffffff0000000000000000000000000000000000000000000000000000000082167f7ba3dfb300000000000000000000000000000000000000000000000000000000148061015657507f01ffc9a7000000000000000000000000000000000000000000000000000000007fffffffff000000000000000000000000000000000000000000000000000000008316145b92915050565b60008183111561016e575060026101a4565b7f00000000000000000000000000000000000000000000000000000000000000008383031061019e5760016101a1565b60025b90505b9392505050565b6000602082840312156101bd57600080fd5b81357fffffffff00000000000000000000000000000000000000000000000000000000811681146101a457600080fd5b60008060006060848603121561020257600080fd5b505081359360208301359350604090920135919050565b6020810160038310610254577f4e487b7100000000000000000000000000000000000000000000000000000000600052602160045260246000fd5b9190529056fea2646970667358221220c9c78308a36445d127db4aee08a503e92a453abd0dbef089eb2f3d1fe2a4157464736f6c63430008100033";
 
-type JB3DayReconfigurationBufferBallotConstructorParams =
+type JB1DayReconfigurationBufferBallotConstructorParams =
   | [signer?: Signer]
   | ConstructorParameters<typeof ContractFactory>;
 
 const isSuperArgs = (
-  xs: JB3DayReconfigurationBufferBallotConstructorParams
+  xs: JB1DayReconfigurationBufferBallotConstructorParams
 ): xs is ConstructorParameters<typeof ContractFactory> => xs.length > 1;
 
-export class JB3DayReconfigurationBufferBallot__factory extends ContractFactory {
-  constructor(...args: JB3DayReconfigurationBufferBallotConstructorParams) {
+export class JB1DayReconfigurationBufferBallot__factory extends ContractFactory {
+  constructor(...args: JB1DayReconfigurationBufferBallotConstructorParams) {
     if (isSuperArgs(args)) {
       super(...args);
     } else {
@@ -113,11 +113,11 @@ export class JB3DayReconfigurationBufferBallot__factory extends ContractFactory 
   override deploy(
     _duration: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<JB3DayReconfigurationBufferBallot> {
+  ): Promise<JB1DayReconfigurationBufferBallot> {
     return super.deploy(
       _duration,
       overrides || {}
-    ) as Promise<JB3DayReconfigurationBufferBallot>;
+    ) as Promise<JB1DayReconfigurationBufferBallot>;
   }
   override getDeployTransaction(
     _duration: BigNumberish,
@@ -125,28 +125,28 @@ export class JB3DayReconfigurationBufferBallot__factory extends ContractFactory 
   ): TransactionRequest {
     return super.getDeployTransaction(_duration, overrides || {});
   }
-  override attach(address: string): JB3DayReconfigurationBufferBallot {
-    return super.attach(address) as JB3DayReconfigurationBufferBallot;
+  override attach(address: string): JB1DayReconfigurationBufferBallot {
+    return super.attach(address) as JB1DayReconfigurationBufferBallot;
   }
-  override connect(signer: Signer): JB3DayReconfigurationBufferBallot__factory {
-    return super.connect(signer) as JB3DayReconfigurationBufferBallot__factory;
+  override connect(signer: Signer): JB1DayReconfigurationBufferBallot__factory {
+    return super.connect(signer) as JB1DayReconfigurationBufferBallot__factory;
   }
 
   static readonly bytecode = _bytecode;
   static readonly abi = _abi;
-  static createInterface(): JB3DayReconfigurationBufferBallotInterface {
+  static createInterface(): JB1DayReconfigurationBufferBallotInterface {
     return new utils.Interface(
       _abi
-    ) as JB3DayReconfigurationBufferBallotInterface;
+    ) as JB1DayReconfigurationBufferBallotInterface;
   }
   static connect(
     address: string,
     signerOrProvider: Signer | Provider
-  ): JB3DayReconfigurationBufferBallot {
+  ): JB1DayReconfigurationBufferBallot {
     return new Contract(
       address,
       _abi,
       signerOrProvider
-    ) as JB3DayReconfigurationBufferBallot;
+    ) as JB1DayReconfigurationBufferBallot;
   }
 }

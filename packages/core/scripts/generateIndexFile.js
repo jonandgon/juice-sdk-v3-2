@@ -14,7 +14,9 @@ const CONTRACTS = [
   'JBPrices',
   'JBETHERC20ProjectPayerDeployer',
   'JBProjects',
+  'JBChainlinkV3PriceFeed',
   'JBETHERC20SplitsPayerDeployer',
+  'JB1DayReconfigurationBufferBallot',
   'JB3DayReconfigurationBufferBallot',
   'JB7DayReconfigurationBufferBallot',
 ];
@@ -33,9 +35,7 @@ const IMPORTS =
     contractName => `import {
   abi as ${contractName}ABI_mainnet,
   address as ${contractName}Address_mainnet,
-} ${(contractName === 'JB3DayReconfigurationBufferBallot' || contractName === 'JB7DayReconfigurationBufferBallot')
-    ? `from '@jbx-protocol/contracts-v2/deployments/mainnet/${contractName}.json';` 
-    : `from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/${contractName}.json';`}`,
+} from '@jbx-protocol/juice-contracts-v3/deployments/mainnet/${contractName}.json';`,
   ).join('\n') +
   CONTRACTS.map(
     contractName => `import {
