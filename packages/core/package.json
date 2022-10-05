@@ -11,7 +11,7 @@
   ],
   "funding": "https://juicebox.money/p/peel",
   "scripts": {
-    "prebuild": "rm -Rf dist/",
+    "prebuild": "rm -Rf dist/ && yarn generate-types && yarn generate-index",
     "build": "yarn node:build && yarn browser:build",
     "browser:build": "tsc --project ./tsconfig.browser.json",
     "postbrowser:build": "rollup -c rollup.config.js",
