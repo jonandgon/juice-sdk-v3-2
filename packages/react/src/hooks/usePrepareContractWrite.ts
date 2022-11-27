@@ -1,4 +1,4 @@
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import { BigNumberish } from '@ethersproject/bignumber';
 
 export interface TransactionOverrides {

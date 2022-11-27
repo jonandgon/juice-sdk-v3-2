@@ -3,7 +3,7 @@
  */
 import { Provider } from '@ethersproject/abstract-provider';
 import { Signer } from '@ethersproject/abstract-signer';
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import {
   abi as JBETHPaymentTerminalABI_mainnet,
   address as JBETHPaymentTerminalAddress_mainnet,

@@ -26,7 +26,7 @@ const generateFileHead = imports => `/**
 */
 import { Provider } from '@ethersproject/abstract-provider';
 import { Signer } from '@ethersproject/abstract-signer';
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 ${imports}
 type SignerOrProvider = Signer | Provider;`;
 

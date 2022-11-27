@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Contract } from '@ethersproject/contracts';
+import { Contract } from 'ethers';
 import { useContractReadState } from './state/useContractReadState';
 import { ContractReadHookResponse } from '../types';
 
