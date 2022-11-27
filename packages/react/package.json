@@ -2,7 +2,6 @@
   "name": "juice-hooks",
   "version": "3.2.5-alpha",
   "description": "",
-  "type": "module",
   "module": "./lib/esm/index.js",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/index.d.ts",
