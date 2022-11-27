@@ -63,7 +63,7 @@ export default function useHasPermission({
     contract
       .hasPermissions(
         address,
-        owner,
+        owner ?? '',
         projectId,
         Array.isArray(permission) ? permission : [permission],
       )

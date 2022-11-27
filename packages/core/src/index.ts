@@ -192,7 +192,7 @@ export const getJBETHPaymentTerminal = (
       ? JBETHPaymentTerminalABI_goerli
       : JBETHPaymentTerminalABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBETHPaymentTerminal;
+  ) as unknown as Contract as JBETHPaymentTerminal;
 export const getJBSingleTokenPaymentTerminalStore = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -205,7 +205,7 @@ export const getJBSingleTokenPaymentTerminalStore = (
       ? JBSingleTokenPaymentTerminalStoreABI_goerli
       : JBSingleTokenPaymentTerminalStoreABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBSingleTokenPaymentTerminalStore;
+  ) as unknown as Contract as JBSingleTokenPaymentTerminalStore;
 export const getJBController = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -216,7 +216,7 @@ export const getJBController = (
       : JBControllerAddress_mainnet,
     network === 'goerli' ? JBControllerABI_goerli : JBControllerABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBController;
+  ) as unknown as Contract as JBController;
 export const getJBFundingCycleStore = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -229,7 +229,7 @@ export const getJBFundingCycleStore = (
       ? JBFundingCycleStoreABI_goerli
       : JBFundingCycleStoreABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBFundingCycleStore;
+  ) as unknown as Contract as JBFundingCycleStore;
 export const getJBSplitsStore = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -240,7 +240,7 @@ export const getJBSplitsStore = (
       : JBSplitsStoreAddress_mainnet,
     network === 'goerli' ? JBSplitsStoreABI_goerli : JBSplitsStoreABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBSplitsStore;
+  ) as unknown as Contract as JBSplitsStore;
 export const getJBCurrencies = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -251,7 +251,7 @@ export const getJBCurrencies = (
       : JBCurrenciesAddress_mainnet,
     network === 'goerli' ? JBCurrenciesABI_goerli : JBCurrenciesABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBCurrencies;
+  ) as unknown as Contract as JBCurrencies;
 export const getJBOperatorStore = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -264,7 +264,7 @@ export const getJBOperatorStore = (
       ? JBOperatorStoreABI_goerli
       : JBOperatorStoreABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBOperatorStore;
+  ) as unknown as Contract as JBOperatorStore;
 export const getJBTokenStore = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -275,7 +275,7 @@ export const getJBTokenStore = (
       : JBTokenStoreAddress_mainnet,
     network === 'goerli' ? JBTokenStoreABI_goerli : JBTokenStoreABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBTokenStore;
+  ) as unknown as Contract as JBTokenStore;
 export const getJBDirectory = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -286,7 +286,7 @@ export const getJBDirectory = (
       : JBDirectoryAddress_mainnet,
     network === 'goerli' ? JBDirectoryABI_goerli : JBDirectoryABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBDirectory;
+  ) as unknown as Contract as JBDirectory;
 export const getJBPrices = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -295,7 +295,7 @@ export const getJBPrices = (
     network === 'goerli' ? JBPricesAddress_goerli : JBPricesAddress_mainnet,
     network === 'goerli' ? JBPricesABI_goerli : JBPricesABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBPrices;
+  ) as unknown as Contract as JBPrices;
 export const getJBETHERC20ProjectPayerDeployer = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -308,7 +308,7 @@ export const getJBETHERC20ProjectPayerDeployer = (
       ? JBETHERC20ProjectPayerDeployerABI_goerli
       : JBETHERC20ProjectPayerDeployerABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBETHERC20ProjectPayerDeployer;
+  ) as unknown as Contract as JBETHERC20ProjectPayerDeployer;
 export const getJBProjects = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -317,7 +317,7 @@ export const getJBProjects = (
     network === 'goerli' ? JBProjectsAddress_goerli : JBProjectsAddress_mainnet,
     network === 'goerli' ? JBProjectsABI_goerli : JBProjectsABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBProjects;
+  ) as unknown as Contract as JBProjects;
 export const getJBChainlinkV3PriceFeed = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -330,7 +330,7 @@ export const getJBChainlinkV3PriceFeed = (
       ? JBChainlinkV3PriceFeedABI_goerli
       : JBChainlinkV3PriceFeedABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBChainlinkV3PriceFeed;
+  ) as unknown as Contract as JBChainlinkV3PriceFeed;
 export const getJBETHERC20SplitsPayerDeployer = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -343,7 +343,7 @@ export const getJBETHERC20SplitsPayerDeployer = (
       ? JBETHERC20SplitsPayerDeployerABI_goerli
       : JBETHERC20SplitsPayerDeployerABI_mainnet,
     signerOrProvider,
-  ) as Contract as JBETHERC20SplitsPayerDeployer;
+  ) as unknown as Contract as JBETHERC20SplitsPayerDeployer;
 export const getJB1DayReconfigurationBufferBallot = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -356,7 +356,7 @@ export const getJB1DayReconfigurationBufferBallot = (
       ? JB1DayReconfigurationBufferBallotABI_goerli
       : JB1DayReconfigurationBufferBallotABI_mainnet,
     signerOrProvider,
-  ) as Contract as JB1DayReconfigurationBufferBallot;
+  ) as unknown as Contract as JB1DayReconfigurationBufferBallot;
 export const getJB3DayReconfigurationBufferBallot = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -369,7 +369,7 @@ export const getJB3DayReconfigurationBufferBallot = (
       ? JB3DayReconfigurationBufferBallotABI_goerli
       : JB3DayReconfigurationBufferBallotABI_mainnet,
     signerOrProvider,
-  ) as Contract as JB3DayReconfigurationBufferBallot;
+  ) as unknown as Contract as JB3DayReconfigurationBufferBallot;
 export const getJB7DayReconfigurationBufferBallot = (
   signerOrProvider: SignerOrProvider,
   { network }: { network: 'mainnet' | 'goerli' } = { network: 'mainnet' },
@@ -382,4 +382,4 @@ export const getJB7DayReconfigurationBufferBallot = (
       ? JB7DayReconfigurationBufferBallotABI_goerli
       : JB7DayReconfigurationBufferBallotABI_mainnet,
     signerOrProvider,
-  ) as Contract as JB7DayReconfigurationBufferBallot;
+  ) as unknown as Contract as JB7DayReconfigurationBufferBallot;
