@@ -62,7 +62,7 @@ new Contract(
   network === 'goerli' ? ${contractName}Address_goerli : ${contractName}Address_mainnet,
   network === 'goerli' ? ${contractName}ABI_goerli : ${contractName}ABI_mainnet,
   signerOrProvider,
-) as unknown as Contract as ${contractName};`,
+) as unknown as ${contractName};`,
   ).join('\n');
 
 const createIndexTsFile = () => {
