@@ -3,7 +3,7 @@ import { Provider } from '@ethersproject/abstract-provider';
 import { Signer } from '@ethersproject/abstract-signer';
 import React from 'react';
 
-type NetworkName = 'rinkeby' | 'mainnet';
+type NetworkName = 'goerli' | 'mainnet';
 
 export interface JuiceContextData {
   provider?: Signer | Provider;

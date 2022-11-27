@@ -3,7 +3,7 @@ import {
   TransactionResponse,
   usePrepareContractWrite,
 } from '../../../hooks/usePrepareContractWrite';
-import { JBETHPaymentTerminal } from 'juice-sdk';
+import { JBETHPaymentTerminal } from 'juice-sdk-v3/src';
 import { useJBETHPaymentTerminal } from '../contracts';
 import { ETH_TOKEN_ADDRESS } from '../../../constants/addresses';
 

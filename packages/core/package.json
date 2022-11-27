@@ -1,7 +1,7 @@
 {
-  "name": "@jigglyjams/juice-sdk-v3",
-  "version": "2.1.0-alpha",
-  "repository": "git@github.com:jbx-protocol/juice-sdk.git",
+  "name": "juice-sdk-v3",
+  "version": "0.0.1-alpha",
+  "repository": "git@github.com:jonandgon/juice-sdk-v3-2.git",
   "license": "MIT",
   "private": false,
   "module": "./dist/esm/index.js",

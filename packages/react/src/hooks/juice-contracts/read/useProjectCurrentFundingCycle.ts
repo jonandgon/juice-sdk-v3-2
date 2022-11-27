@@ -39,7 +39,7 @@ export default function useProjectCurrentFundingCycle({
         setLoading(false);
         setData({
           fundingCycleData: data?.[0],
-          fundingCycleMetadata: data?.[1],
+          fundingCycleMetadata: {...data?.[1], allowChangeToken:false},
         });
       })
       .catch(e => {

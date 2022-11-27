@@ -22,7 +22,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^17.0.35",
+    "@types/node": "^16.18.3",
     "@types/react": "^18.0.9",
     "eslint-config-prettier": "^8.5.0",
     "eslint-config-react-app": "^7.0.1",
@@ -30,9 +30,9 @@
     "typescript": "^4.6.4"
   },
   "peerDependencies": {
-    "react": ">=18.1.0"
+    "react": ">=18.0.0"
   },
   "dependencies": {
-    "juice-sdk": "2.1.0-alpha"
+    "juice-sdk-v3": "0.0.1-alpha"
   }
 }
