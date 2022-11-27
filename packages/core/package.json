@@ -4,6 +4,7 @@
   "repository": "git@github.com:jonandgon/juice-sdk-v3-2.git",
   "license": "MIT",
   "private": false,
+  "type": "module",
   "module": "./dist/esm/index.js",
   "main": "./dist/cjs/index.js",
   "types": "./dist/cjs/index.d.ts",
