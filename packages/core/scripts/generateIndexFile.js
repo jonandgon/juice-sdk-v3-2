@@ -47,7 +47,7 @@ const IMPORTS =
   `import {
     ${CONTRACTS.join(',\n')}
   } from './types/contracts';\n` +
-  `export {
+  `export type {
     ${CONTRACTS.join(',\n')}
   } from './types/contracts';\n`;
 
@@ -62,7 +62,7 @@ new Contract(
   network === 'goerli' ? ${contractName}Address_goerli : ${contractName}Address_mainnet,
   network === 'goerli' ? ${contractName}ABI_goerli : ${contractName}ABI_mainnet,
   signerOrProvider,
-) as ${contractName};`,
+) as Contract as ${contractName};`,
   ).join('\n');
 
 const createIndexTsFile = () => {
