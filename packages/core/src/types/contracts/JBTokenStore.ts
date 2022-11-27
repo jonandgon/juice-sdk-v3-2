@@ -2,17 +2,19 @@
 /* tslint:disable */
 /* eslint-disable */
 import type {
-  BaseContract,
   BigNumber,
   BigNumberish,
   BytesLike,
   CallOverrides,
-  ContractTransaction,
   Overrides,
   PopulatedTransaction,
   Signer,
   utils,
 } from "ethers";
+import type {
+  BaseContract,
+  ContractTransaction
+} from '@ethersproject/contracts'
 import type {
   FunctionFragment,
   Result,
